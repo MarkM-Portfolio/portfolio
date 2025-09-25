@@ -1,0 +1,9 @@
+.vscode
+.idea
+.DS_Store
+__pycache__
+
+
+sites*
+*old
+.portfolio_gh_token
