@@ -1,0 +1,13 @@
+<input type="text" id="search-box" placeholder="Search repositories, topics, or languages...">
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const searchBox = document.getElementById("search-box");
+  if (!searchBox) return;
+  searchBox.addEventListener("input", function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll(".card").forEach(card => {
+      card.style.display = card.innerText.toLowerCase().includes(query) ? "block" : "none";
+    });
+  });
+});
+</script>

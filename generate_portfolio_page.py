@@ -110,79 +110,49 @@ def detect_extra_languages(repo, refresh=False):
 def generate_index(repos):
     os.makedirs(SITE_DIR, exist_ok=True)
     index_path = os.path.join(SITE_DIR, "index.html")
+
+    # Load templates
+    def load_template(name):
+        with open(os.path.join("templates", name), "r", encoding="utf-8") as f:
+            return f.read()
+
+    style_html = load_template("style.html")
+    search_html = load_template("search.html")
+    header_html = load_template("header.html").replace("{ORG_NAME}", ORG_NAME).replace("{CV_FILE}", CV_FILE).replace("{SEARCH_COMPONENT}", search_html)
+    base_start = load_template("base_start.html").replace("{ORG_NAME}", ORG_NAME).replace("{STYLE_HTML}", style_html).replace("{HEADER_HTML}", header_html)
+    base_end = load_template("base_end.html")
+
+    # Build page
     with open(index_path, "w", encoding="utf-8") as f:
-        f.write(f"""<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{ORG_NAME} Portfolio</title>
-<style>
-:root {{ --bg:#0d1117; --header-bg:#161b22; --text:#c9d1d9; --card-bg:#161b22; --border:#30363d; --link:#58a6ff; --desc:#8b949e; --stars:#a1a1aa; --topic-bg:#21262d; --lang-bg:#30363d; }}
-body.light {{ --bg:#f9fafb; --header-bg:#24292f; --text:#333; --card-bg:#fff; --border:#e5e7eb; --link:#0366d6; --desc:#555; --stars:#777; --topic-bg:#eaf5ff; --lang-bg:#f3f4f6; }}
-body {{ font-family:Arial,sans-serif; background:var(--bg); color:var(--text); margin:0; padding:0; transition:0.3s; }}
-header {{ background:var(--header-bg); color:var(--text); padding:1.5rem; text-align:center; border-bottom:1px solid var(--border); }}
-header h1 {{ margin:0; font-size:2rem; }}
-.cv-button {{ display:block; margin:0.8rem auto 0 auto; background:gold; color:white; padding:0.4rem 0.8rem; border-radius:6px; border:1px solid white; text-decoration:none; font-size:0.9rem; width:max-content; }}
-#toggle-btn {{ position:absolute; top:1.2rem; right:1rem; background:none; border:1px solid var(--border); color:var(--text); padding:0.4rem 0.8rem; border-radius:6px; cursor:pointer; font-size:0.9rem; }}
-#search-box {{ width:100%; max-width:400px; padding:0.6rem 1rem; margin:1rem auto 0; display:block; border:1px solid var(--border); border-radius:6px; font-size:1rem; background:var(--card-bg); color:var(--text); }}
-main {{ max-width:1100px; margin:2rem auto; padding:0 1rem; }}
-.grid {{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem; }}
-.card {{ background:var(--card-bg); padding:1.2rem; border-radius:10px; border:1px solid var(--border); box-shadow:0 2px 6px rgba(0,0,0,0.2); transition:0.2s; }}
-.card:hover {{ transform:translateY(-4px); box-shadow:0 6px 14px rgba(0,0,0,0.25); }}
-.card a {{ text-decoration:none; font-weight:bold; color:var(--link); font-size:1.2rem; }}
-.desc {{ margin:0.5rem 0 0.8rem; font-size:0.95rem; color:var(--desc); }}
-.stars {{ font-size:0.85rem; color:var(--stars); margin-bottom:0.5rem; }}
-.topics,.languages {{ margin-top:0.5rem; }}
-.topic,.lang {{ display:inline-block; padding:0.2rem 0.6rem; margin:0 0.3rem 0.3rem 0; font-size:0.8rem; border-radius:20px; border:1px solid var(--border); }}
-.lang {{ background:var(--lang-bg); }}
-</style>
-<script>
-function toggleTheme() {{
-    document.body.classList.toggle('light');
-    localStorage.setItem('theme', document.body.classList.contains('light')?'light':'dark');
-}}
-window.onload=function() {{
-    if(localStorage.getItem('theme')==='light') document.body.classList.add('light');
-    const searchBox=document.getElementById('search-box');
-    searchBox.addEventListener('input',function(){{
-        const query=this.value.toLowerCase();
-        document.querySelectorAll('.card').forEach(card=>{{ card.style.display=card.innerText.toLowerCase().includes(query)?'block':'none'; }});
-    }});
-}};
-</script>
-</head>
-<body>
-<header>
-<h1>{ORG_NAME} Repositories</h1>
-<a href="{CV_FILE}" download class="cv-button">📄 Download CV</a>
-<button id="toggle-btn" onclick="toggleTheme()">🌙/☀️</button>
-<input type="text" id="search-box" placeholder="Search repositories, topics, or languages...">
-</header>
-<main>
-<div class="grid">
-""")
+        f.write(base_start)
+
         for repo in repos:
             desc = repo.get("description") or "No description provided."
             stars = repo.get("stargazers_count", 0)
             topics = repo.get("topics", [])
             languages = repo.get("languages", [])
-            f.write(f"<div class='card'>\n")
+
+            f.write("<div class='card'>\n")
             f.write(f"<a href='{repo['html_url']}' target='_blank'>{repo['name']}</a>\n")
             f.write(f"<p class='desc'>{desc}</p>\n")
             f.write(f"<p class='stars'>⭐ {stars} stars</p>\n")
-            f.write("<div class='topics'>\n")
-            for t in topics:
-                f.write(f"<span class='topic'>{t}</span>\n")
-            f.write("</div>\n")
+
+            if topics:
+                f.write("<div class='topics'>\n")
+                for t in topics:
+                    f.write(f"<span class='topic'>{t}</span>\n")
+                f.write("</div>\n")
+
             if languages:
                 f.write("<div class='languages'>\n")
                 for l in languages:
                     color = LANG_COLORS.get(l, "#6e7681")
                     f.write(f"<span class='lang' style='background:{color}'>{l}</span>\n")
                 f.write("</div>\n")
+
             f.write("</div>\n")
-        f.write("</div></main></body></html>")
+
+        f.write(base_end)
 
 # --- MAIN ---
 def main():

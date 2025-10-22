@@ -1,0 +1,15 @@
+<header>
+<h1>{ORG_NAME} Repositories</h1>
+<a href="{CV_FILE}" download class="cv-button">📄 Download CV</a>
+<button id="toggle-btn" onclick="toggleTheme()">🌙/☀️</button>
+{SEARCH_COMPONENT}
+</header>
+<script>
+function toggleTheme() {
+  document.body.classList.toggle('light');
+  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+}
+window.onload = function() {
+  if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
+};
+</script>
