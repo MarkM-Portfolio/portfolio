@@ -1,0 +1,6 @@
+name = "mark-portfolio"
+main = "worker.js"
+compatibility_date = "2025-11-06"
+
+[site]
+bucket = "./site"
