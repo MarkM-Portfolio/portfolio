@@ -14,10 +14,12 @@ from config import (ORG_NAME, REMOTE_PREFIX, USERNAME, NAME, EMAIL, BRANCH, SCRI
 # --- TOKEN ---
 if not os.path.isfile(TOKEN_FILE) or os.stat(TOKEN_FILE).st_size == 0:
     print(f"❌ GitHub token file missing or empty: {TOKEN_FILE}")
-    exit(1)
-
-with open(TOKEN_FILE, "r") as f:
-    GITHUB_TOKEN = f.read().strip()
+    GITHUB_TOKEN=""
+    print(f"Will use env var in piepline: {GITHUB_TOKEN}")
+    # exit(1)
+else:
+    with open(TOKEN_FILE, "r") as f:
+        GITHUB_TOKEN = f.read().strip()
 
 HEADERS = {
     "Authorization": f"token {GITHUB_TOKEN}",
