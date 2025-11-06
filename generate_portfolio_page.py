@@ -15,7 +15,7 @@ from config import (ORG_NAME, REMOTE_PREFIX, USERNAME, NAME, EMAIL, BRANCH, SCRI
 if not os.path.isfile(TOKEN_FILE) or os.stat(TOKEN_FILE).st_size == 0:
     print(f"❌ GitHub token file missing or empty: {TOKEN_FILE}")
     GITHUB_TOKEN=os.getenv("GITHUB_TOKEN")
-    print(f"Will use env var in pipeline: {GITHUB_TOKEN}")
+    print(f"Will use environment variables in pipeline...")
     # exit(1)
 else:
     with open(TOKEN_FILE, "r") as f:
