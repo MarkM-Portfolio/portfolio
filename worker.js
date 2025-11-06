@@ -2,24 +2,38 @@ import { getAssetFromKV } from "@cloudflare/kv-asset-handler";
 
 export default {
   async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+
     try {
-      // Map / and directories to /index.html
-      const url = new URL(request.url);
-      if (url.pathname.endsWith("/")) {
-        url.pathname += "index.html";
-        request = new Request(url.toString(), request);
+      // If user visits "/", try both index.html and hashed versions
+      if (url.pathname === "/" || url.pathname.endsWith("/")) {
+        try {
+          // Try normal /index.html
+          const asset = await getAssetFromKV(
+            { request: new Request(url.origin + "/index.html", request), waitUntil: ctx.waitUntil }
+          );
+          return asset;
+        } catch (err) {
+          // Fallback to hashed version (like index.2234a815c9.html)
+          const manifest = JSON.parse(env.__STATIC_CONTENT_MANIFEST);
+          const hashedKey = Object.keys(manifest).find(k =>
+            k.startsWith("index.") && k.endsWith(".html")
+          );
+          if (hashedKey) {
+            const asset = await getAssetFromKV(
+              { request: new Request(url.origin + "/" + hashedKey, request), waitUntil: ctx.waitUntil }
+            );
+            return asset;
+          }
+          throw err;
+        }
       }
 
-      const asset = await getAssetFromKV(
-        { request, waitUntil: ctx.waitUntil },
-        { mapRequestToAsset: (req) => req }
-      );
+      // Normal asset serving
+      const asset = await getAssetFromKV({ request, waitUntil: ctx.waitUntil });
+      return asset;
 
-      const headers = new Headers(asset.headers);
-      headers.set("Cache-Control", "public, max-age=3600");
-
-      return new Response(asset.body, { ...asset, headers });
-    } catch (e) {
+    } catch (err) {
       return new Response("404 Not Found", { status: 404 });
     }
   },
