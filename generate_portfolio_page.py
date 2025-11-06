@@ -155,29 +155,65 @@ def generate_index(repos):
         f.write(base_end)
 
 # --- MAIN ---
-def main():
-    print(f"Fetching repos for org: {LBLU}{ORG_NAME}{RES}...")
-    url = f"https://api.github.com/orgs/{ORG_NAME}/repos?per_page=100"
-    resp = requests.get(url, headers=HEADERS)
+def get_all_repos(org_name):
+    repos = []
+    page = 1
+    per_page = 100
+    while True:
+        url = f"https://api.github.com/orgs/{org_name}/repos?per_page={per_page}&page={page}"
+        resp = requests.get(url, headers=HEADERS)
+        if resp.status_code != 200:
+            print("Failed to fetch repos:", resp.status_code, resp.text)
+            break
+        page_repos = resp.json()
+        if not page_repos:
+            break
+        repos.extend(page_repos)
+        page += 1
+    return repos
 
-    if resp.status_code == 200:
-        data = resp.json()
-        repos = []
-        for repo in data:
-            if repo['name'].lower() in EXCLUDE_REPOS:
-                continue
-            print(f"Processing {BLGRE}{repo['name']}{RES}...")
-            repo['languages'] = fetch_languages(repo['full_name'])
-            repo['languages'] += detect_extra_languages(repo)
-            repos.append(repo)
-        repos.sort(key=lambda r: r.get("stargazers_count", 0), reverse=True)
-    else:
-        print(f"❌ Failed to fetch repos: HTTP {resp.status_code}")
-        exit(1)
+def generate(data):
+    print(f"Fetching repos for org: {LBLU}{ORG_NAME}{RES}...")
+    repos = []
+    for repo in data:
+        if repo['name'].lower() in EXCLUDE_REPOS or 'practice' in repo['name'].lower():
+            print(f"Exclude Repo --> {BLRED}{repo['name']}{RES}")
+            continue
+        print(f"Processing {BLGRE}{repo['name']}{RES}...")
+        repo['languages'] = fetch_languages(repo['full_name'])
+        repo['languages'] += detect_extra_languages(repo)
+        repos.append(repo)
+    repos.sort(key=lambda r: r.get("stargazers_count", 0), reverse=True)
 
     print(f"Found {YEL}{len(repos)}{RES} repos.")
     generate_index(repos)
     print(f"Generated {LMAG}index.html{RES} in {SITE_DIR}")
 
+# def main():
+#     print(f"Fetching repos for org: {LBLU}{ORG_NAME}{RES}...")
+#     url = f"https://api.github.com/orgs/{ORG_NAME}/repos?per_page=100"
+#     resp = requests.get(url, headers=HEADERS)
+
+#     if resp.status_code == 200:
+#         data = resp.json()
+#         repos = []
+#         for repo in data:
+#             if repo['name'].lower() in EXCLUDE_REPOS:
+#                 continue
+#             print(f"Processing {BLGRE}{repo['name']}{RES}...")
+#             repo['languages'] = fetch_languages(repo['full_name'])
+#             repo['languages'] += detect_extra_languages(repo)
+#             repos.append(repo)
+#         repos.sort(key=lambda r: r.get("stargazers_count", 0), reverse=True)
+#     else:
+#         print(f"❌ Failed to fetch repos: HTTP {resp.status_code}")
+#         exit(1)
+
+#     print(f"Found {YEL}{len(repos)}{RES} repos.")
+#     generate_index(repos)
+#     print(f"Generated {LMAG}index.html{RES} in {SITE_DIR}")
+
 if __name__ == "__main__":
-    main()
+    # main()
+    repos = get_all_repos(ORG_NAME)
+    generate(data=repos)

@@ -263,33 +263,31 @@ def add_topics(repo_name):
     else: print(f"❌ Failed to add topics to {LGRE}{repo_name}{RES}: HTTP {resp.status_code}, {resp.text}")
 
 # --- Main Loop ---
-local_dirs=[d for d in os.listdir(BASE_DIR) if os.path.isdir(os.path.join(BASE_DIR,d))]
+repo = "Repo Path here"
+repo_name = os.path.basename(repo)
+if repo_name in EXCLUDE_REPOS or 'practice' in repo_name:
+    print(f"⏭ Repo {repo_name} is not allowed --> EXCLUDED_REPOS")
+    exit(1)
+print(f"📦 Processing {BLGRE}{repo_name}{RES} (path: {repo})")
 
-for repo in local_dirs:
-    repo_name = os.path.basename(repo)
-    if repo_name in EXCLUDE_REPOS or 'practice' in repo_name:
-        print(f"⏭ Skipping {repo_name}")
-        continue
-    print(f"📦 Processing {BLGRE}{repo_name}{RES} (path: {repo})")
+remove_git_history(repo)     # clean history
+add_gitignore(repo)          # ignore unwanted paths
+track_git_lfs(repo)          # track large files before committing
+add_gitattributes(repo)      # write gitattributes after LFS
+ensure_empty_dirs(repo)      # keep empty dirs
+initial_commit(repo, repo_name)  # commit everything
 
-    remove_git_history(repo)     # clean history
-    add_gitignore(repo)          # ignore unwanted paths
-    track_git_lfs(repo)          # track large files before committing
-    add_gitattributes(repo)      # write gitattributes after LFS
-    ensure_empty_dirs(repo)      # keep empty dirs
-    initial_commit(repo, repo_name)  # commit everything
+stats = calculate_language_stats(repo)
+if stats:
+    print(f"📊 {CYN}Estimated language percentages{RES}:")
+    for lang, pct in sorted(stats.items(), key=lambda x: x[1], reverse=True):
+        print(f"   {YEL}{lang}{RES}: {MAG}{pct}{WHTE}%{RES}")
+else:
+    print(f"📊 {LRED}No recognizable language files found{RES}.")
 
-    stats = calculate_language_stats(repo)
-    if stats:
-        print(f"📊 {CYN}Estimated language percentages{RES}:")
-        for lang, pct in sorted(stats.items(), key=lambda x: x[1], reverse=True):
-            print(f"   {YEL}{lang}{RES}: {MAG}{pct}{WHTE}%{RES}")
-    else:
-        print(f"📊 {LRED}No recognizable language files found{RES}.")
-
-    if not create_github_repo(repo_name): continue
-    set_remote_and_push(repo, repo_name)
-    add_topics(repo_name)
+if not create_github_repo(repo_name): exit(1)
+set_remote_and_push(repo, repo_name)
+add_topics(repo_name)
 
 print(f"🎉 {BLYEL}All repos processed.{RES}")
 

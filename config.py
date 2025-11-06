@@ -28,7 +28,7 @@ BRANCH = "master"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TOKEN_FILE = os.path.join(SCRIPT_DIR, ".portfolio_gh_token")
 SITE_DIR = "site"
-EXCLUDE_REPOS = [ "sap-media-s3-bucket", "fork", "need_this", "portfolio", "kubernetes_practice", "ansible-practice", "BackUps" ]
+EXCLUDE_REPOS = [ "sap-media-s3-bucket", "fork", "need_this", "portfolio", "BackUps" ]
 EXCLUDE_PATHS = [ ".vscode", ".idea", ".DS_Store", "__pycache__", "*.log", ".git", ".venv", "node_modules", "bin", "build", "dist", ".terraform",
                  '.html', '.zip', '.tar', '.exe', '.dll', '.so', '.jpg', '.png', '.mp4', ".jar" ]
 DEFAULT_LANG_MAP = { "py": "Python", "js": "JavaScript", "ts": "TypeScript", "java": "Java",
