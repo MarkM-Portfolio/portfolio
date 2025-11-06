@@ -8,4 +8,4 @@ preview_urls = false
 [build]
 command = "pip install -r requirements.txt && python generate_portfolio_page.py"
 
-# npm install -g wrangler && wrangler deploy --minify --assets=site --custom-domain markmonmonteros.site <-- deploy command just for reference
+# npm install -g wrangler && wrangler deploy --minify --assets=site <-- deploy command just for reference
