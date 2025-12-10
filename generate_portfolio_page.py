@@ -1,32 +1,53 @@
-#!/usr/bin/env bash
+#!/usr/bin/env python3
+# generate_site.py — async GitHub repo index generator with colors
 
-'''exec' "$(dirname "$0")/.venv/bin/python" "$0" "$@"
-' '''
+import aiohttp, asyncio, os, json, time
+from pathlib import Path
+from typing import List, Dict, Any, Optional
+from aiohttp import TCPConnector, ClientError, ClientConnectorError
 
+# -------------------------------------------------
+# CONFIG from your config.py
+# -------------------------------------------------
+from config import (
+    ORG_NAME, REMOTE_PREFIX, USERNAME, NAME, EMAIL, BRANCH, SCRIPT_DIR,
+    TOKEN_FILE, EXCLUDE_REPOS, EXCLUDE_PATHS, DEFAULT_LANG_MAP, SITE_DIR,
+    LRED, LBLU, LCYN, LYEL, LMAG, LGRE, LGRY, RED, MAG, YEL, CV_FILE,
+    GRE, CYN, BLU, WHTE, BLRED, BLYEL, BLGRE, BLMAG, BLBLU, ORA,
+    BLCYN, BYEL, BMAG, BCYN, BWHTE, DGRY, BLNK, CLEAR, RES
+)
 
-import os, requests, json
-from config import (ORG_NAME, REMOTE_PREFIX, USERNAME, NAME, EMAIL, BRANCH, SCRIPT_DIR,
-                    TOKEN_FILE, EXCLUDE_REPOS, EXCLUDE_PATHS, DEFAULT_LANG_MAP, SITE_DIR,
-                    LRED, LBLU, LCYN, LYEL, LMAG, LGRE, LGRY, RED, MAG, YEL, CV_FILE,
-                    GRE, CYN, BLU, WHTE, BLRED, BLYEL, BLGRE, BLMAG, BLBLU,
-                    BLCYN, BYEL, BMAG, BCYN, BWHTE, DGRY, BLNK, CLEAR, RES)
+# =================================================
+# COLOR PRINT HELPERS (restored)
+# =================================================
+def p_info(msg): print(f"{LCYN}{msg}{RES}")
+def p_good(msg): print(f"{LGRE}{msg}{RES}")
+def p_warn(msg): print(f"{LYEL}{msg}{RES}")
+def p_err(msg):  print(f"{LRED}{msg}{RES}")
+def p_mag(msg):  print(f"{LMAG}{msg}{RES}")
+def p_blue(msg): print(f"{LBLU}{msg}{RES}")
 
-# --- TOKEN ---
-if not os.path.isfile(TOKEN_FILE) or os.stat(TOKEN_FILE).st_size == 0:
-    print(f"❌ GitHub token file missing or empty: {TOKEN_FILE}")
-    GITHUB_TOKEN=os.getenv("GITHUB_TOKEN")
-    print(f"Will use environment variables in pipeline...")
-    # exit(1)
+# =================================================
+# TOKEN
+# =================================================
+if os.path.isfile(TOKEN_FILE) and os.stat(TOKEN_FILE).st_size > 0:
+    with open(TOKEN_FILE, "r", encoding="utf-8") as tf:
+        GITHUB_TOKEN = tf.read().strip()
+        p_good(f"🔐 Loaded GitHub token from file: {TOKEN_FILE}")
 else:
-    with open(TOKEN_FILE, "r") as f:
-        GITHUB_TOKEN = f.read().strip()
+    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+    p_warn("⚠️ TOKEN_FILE missing — using $GITHUB_TOKEN")
 
 HEADERS = {
-    "Authorization": f"token {GITHUB_TOKEN}",
-    "Accept": "application/vnd.github.mercy-preview+json"  # topics API
+    "Accept": "application/vnd.github.mercy-preview+json",
+    "Connection": "close"
 }
+if GITHUB_TOKEN:
+    HEADERS["Authorization"] = f"token {GITHUB_TOKEN}"
 
-# --- LANGUAGE COLORS ---
+# =================================================
+# LANGUAGE COLORS
+# =================================================
 LANG_COLORS = {
     "Python": "#3572A5",
     "JavaScript": "#f1e05a",
@@ -49,148 +70,266 @@ LANG_COLORS = {
     "Ansible": "#EE0000",
     "YAML": "#cb171e",
     "Kubernetes": "#326CE5",
-    # ... full mapping if desired ...
 }
 
+# =================================================
+# CACHE
+# =================================================
 CACHE_FILE = os.path.join(SCRIPT_DIR, ".contents_cache.json")
-CONTENTS_CACHE = {}
+CONTENTS_CACHE: Dict[str, List[str]] = {}
 if os.path.exists(CACHE_FILE):
-    with open(CACHE_FILE, "r") as f:
-        CONTENTS_CACHE = json.load(f)
+    try:
+        with open(CACHE_FILE, "r", encoding="utf-8") as f:
+            CONTENTS_CACHE = json.load(f)
+            p_info(f"📦 Loaded contents cache ({len(CONTENTS_CACHE)} repos)")
+    except:
+        p_warn("⚠️ Failed to load cache, starting empty")
 
 def save_cache():
-    with open(CACHE_FILE, "w") as f:
-        json.dump(CONTENTS_CACHE, f)
+    try:
+        with open(CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(CONTENTS_CACHE, f, indent=2)
+        p_good("💾 Saved cache")
+    except:
+        p_warn("⚠️ Failed saving cache")
 
-# --- FETCH REPO CONTENTS ---
-def fetch_repo_contents(repo_full_name, refresh=False):
-    if not refresh and repo_full_name in CONTENTS_CACHE:
-        return CONTENTS_CACHE[repo_full_name]
+# =================================================
+# ASYNC HTTP HELPERS (WITH COLOR PRINTS)
+# =================================================
+MAX_ATTEMPTS = 5
+BACKOFF_BASE = 1
+CONCURRENT_CONNECTIONS = 20
+REQUEST_TIMEOUT = 15
 
-    url = f"https://api.github.com/repos/{repo_full_name}/contents"
-    resp = requests.get(url, headers=HEADERS)
+async def fetch_json(session: aiohttp.ClientSession, url: str, attempt: int = 1) -> Optional[Any]:
+    try:
+        async with session.get(url, headers=HEADERS, timeout=REQUEST_TIMEOUT) as resp:
+
+            # RATE LIMIT
+            if resp.status == 403 and resp.headers.get("X-RateLimit-Remaining") == "0":
+                reset_ts = int(resp.headers.get("X-RateLimit-Reset", time.time() + 60))
+                wait_for = max(0, reset_ts - int(time.time()))
+                p_warn(f"🛑 RATE LIMIT — sleeping {wait_for}s → {url}")
+                await asyncio.sleep(wait_for)
+                return await fetch_json(session, url, attempt)
+
+            if resp.status == 200:
+                return await resp.json()
+
+            p_warn(f"⚠️ HTTP {resp.status} for {url}")
+            return None
+
+    except (ClientConnectorError, ClientError, asyncio.TimeoutError) as e:
+        if attempt < MAX_ATTEMPTS:
+            backoff = BACKOFF_BASE * (2 ** (attempt - 1))
+            p_warn(f"⚠️ Error: {e} — attempt {attempt}/{MAX_ATTEMPTS}, retry in {backoff}s → {url}")
+            await asyncio.sleep(backoff)
+            return await fetch_json(session, url, attempt + 1)
+
+        p_err(f"❌ FAILED after {MAX_ATTEMPTS} attempts: {url} ({e})")
+        return None
+
+# =================================================
+# FETCH REPO LIST
+# =================================================
+async def fetch_repo_list(session):
+    repos = []
+    page = 1
+    per_page = 100
+
+    while True:
+        url = f"https://api.github.com/orgs/{ORG_NAME}/repos?per_page={per_page}&page={page}"
+        p_blue(f"📄 Fetching repo page {page}…")
+        data = await fetch_json(session, url)
+
+        if not data:
+            break
+
+        repos.extend(data)
+        if len(data) < per_page:
+            break
+
+        page += 1
+
+    p_good(f"📦 Total repos fetched: {len(repos)}")
+    return repos
+
+# =================================================
+# LANGUAGE + CONTENTS
+# =================================================
+async def fetch_languages(session, full_name):
+    url = f"https://api.github.com/repos/{full_name}/languages"
+    return list((await fetch_json(session, url)) or {})
+
+async def fetch_contents(session, full_name):
+    if full_name in CONTENTS_CACHE:
+        return CONTENTS_CACHE[full_name]
+
+    url = f"https://api.github.com/repos/{full_name}/contents"
+    data = await fetch_json(session, url)
+
     items = []
-    if resp.status_code == 200 and isinstance(resp.json(), list):
-        items = [i["name"].lower() for i in resp.json()]
+    if isinstance(data, list):
+        items = [i.get("name", "").lower() for i in data]
 
-    CONTENTS_CACHE[repo_full_name] = items
+    CONTENTS_CACHE[full_name] = items
     save_cache()
     return items
 
-# --- FETCH LANGUAGES ---
-def fetch_languages(repo_full_name):
-    url = f"https://api.github.com/repos/{repo_full_name}/languages"
-    resp = requests.get(url, headers=HEADERS)
-    if resp.status_code == 200:
-        return list(resp.json().keys())
-    return []
+# =================================================
+# EXTRA LANG DETECTION
+# =================================================
+def detect_extra_languages(repo_name, topics, items):
+    name = repo_name.lower()
+    topics = [t.lower() for t in topics or []]
+    extras = set()
 
-# --- EXTRA LANGUAGE DETECTION ---
-def detect_extra_languages(repo, refresh=False):
-    extras = []
-    name = repo["name"].lower()
-    topics = [t.lower() for t in repo.get("topics", [])]
-    items = fetch_repo_contents(repo["full_name"], refresh=refresh)
+    if "docker" in name or "dockerfile" in items: extras.add("Dockerfile")
+    if "terraform" in name or any(f.endswith(".tf") for f in items): extras.add("Terraform")
+    if "ansible" in name or "ansible.cfg" in items: extras.add("Ansible")
+    if any(f.endswith((".yaml", ".yml")) for f in items): extras.add("YAML")
+    if "k8s" in name or "helm" in items: extras.add("Kubernetes")
 
-    def log_detect(lang):
-        extras.append(lang)
+    return list(extras)
 
-    if any(k in name for k in ["docker", "container"]) or "docker" in topics or "dockerfile" in items:
-        log_detect("Dockerfile")
-    if any(k in name for k in ["terraform", "tf", "iac"]) or "terraform" in topics or any(f.endswith(".tf") for f in items):
-        log_detect("Terraform")
-    if "ansible" in name or "ansible" in topics or any(f in items for f in ["ansible.cfg", "playbook.yml", "playbook.yaml"]):
-        log_detect("Ansible")
-    if any(k in name for k in ["yaml", "yml"]) or "yaml" in topics or any(f.endswith((".yaml", ".yml")) for f in items):
-        log_detect("YAML")
-    if any(k in name for k in ["k8s", "kubernetes"]) or "kubernetes" in topics or "k8s" in topics or any(x in items for x in ["helm", "charts", "manifests"]):
-        log_detect("Kubernetes")
+# =================================================
+# PARALLEL REPO PROCESSING
+# =================================================
+async def process_repo(session, repo):
+    name = repo["name"]
+    full = repo["full_name"]
 
-    return list(set(extras))
+    p_info(f"🔧 Processing {name}…")
 
-# --- GENERATE INDEX ---
+    languages_task = asyncio.create_task(fetch_languages(session, full))
+    contents_task  = asyncio.create_task(fetch_contents(session, full))
+
+    langs = await languages_task
+    contents = await contents_task
+    extras = detect_extra_languages(name, repo.get("topics", []), contents)
+
+    repo["languages"] = list(dict.fromkeys((langs or []) + extras))  # unique
+
+    p_good(f"✔ Done → {name}")
+    return repo
+
+# =================================================
+# HTML GENERATION
+# =================================================
 def generate_index(repos):
     os.makedirs(SITE_DIR, exist_ok=True)
     index_path = os.path.join(SITE_DIR, "index.html")
 
-    # Load templates
     def load_template(name):
         with open(os.path.join("templates", name), "r", encoding="utf-8") as f:
             return f.read()
 
-    style_html = load_template("style.html")
-    search_html = load_template("search.html")
-    header_html = load_template("header.html").replace("{ORG_NAME}", ORG_NAME).replace("{CV_FILE}", CV_FILE).replace("{SEARCH_COMPONENT}", search_html)
-    base_start = load_template("base_start.html").replace("{ORG_NAME}", ORG_NAME).replace("{STYLE_HTML}", style_html).replace("{HEADER_HTML}", header_html)
-    base_end = load_template("base_end.html")
+    styles = load_template("styles.css")
+    search = load_template("search.html")
 
-    # Build page
+    header = load_template("header.html") \
+        .replace("{ORG_NAME}", ORG_NAME) \
+        .replace("{CV_FILE}", CV_FILE) \
+        .replace("{SEARCH_COMPONENT}", search)
+
+    footer = load_template("footer.html") \
+        .replace("{ORG_NAME}", ORG_NAME) \
+        .replace("{EMAIL}", EMAIL) \
+        .replace("{GH_USERNAME}", USERNAME[1]) \
+        .replace("{USERNAME}", USERNAME[0])
+
+    base_start = load_template("base_start.html") \
+        .replace("{ORG_NAME}", ORG_NAME) \
+        .replace("{STYLES_CSS}", styles) \
+        .replace("{HEADER_HTML}", header)
+
+    base_end = load_template("base_end.html") \
+        .replace("{FOOTER_HTML}", footer)
+
     with open(index_path, "w", encoding="utf-8") as f:
         f.write(base_start)
 
         for repo in repos:
-            desc = repo.get("description") or "No description provided."
+            name = repo["name"]
+            p_good(f"📌 Writing card {WHTE}→ {ORA}{name}{RES}")
+
+            desc = repo.get("description", "No description provided.")
             stars = repo.get("stargazers_count", 0)
             topics = repo.get("topics", [])
             languages = repo.get("languages", [])
 
-            f.write("<div class='card'>\n")
-            f.write(f"<a href='{repo['html_url']}' target='_blank'>{repo['name']}</a>\n")
-            f.write(f"<p class='desc'>{desc}</p>\n")
-            f.write(f"<p class='stars'>⭐ {stars} stars</p>\n")
+            f.write(f"""
+<a class="card-link" href="{repo['html_url']}" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">{name}</div>
+    <p class="desc">{desc}</p>
+    <p class="stars">⭐ {stars} stars</p>
+""")
 
             if topics:
-                f.write("<div class='topics'>\n")
+                f.write("    <div class='topics'>\n")
                 for t in topics:
-                    f.write(f"<span class='topic'>{t}</span>\n")
-                f.write("</div>\n")
+                    f.write(f"      <span class='topic'>{t}</span>\n")
+                f.write("    </div>\n")
 
             if languages:
-                f.write("<div class='languages'>\n")
+                f.write("    <div class='languages'>\n")
                 for l in languages:
                     color = LANG_COLORS.get(l, "#6e7681")
-                    f.write(f"<span class='lang' style='background:{color}'>{l}</span>\n")
-                f.write("</div>\n")
+                    f.write(f"      <span class='lang' style='background:{color}'>{l}</span>\n")
+                f.write("    </div>\n")
 
-            f.write("</div>\n")
+            f.write("  </div>\n</a>\n")
 
         f.write(base_end)
 
-# --- MAIN ---
-def get_all_repos(org_name):
-    repos = []
-    page = 1
-    per_page = 100
-    while True:
-        url = f"https://api.github.com/orgs/{org_name}/repos?per_page={per_page}&page={page}"
-        resp = requests.get(url, headers=HEADERS)
-        if resp.status_code != 200:
-            print("Failed to fetch repos:", resp.status_code, resp.text)
-            break
-        page_repos = resp.json()
-        if not page_repos:
-            break
-        repos.extend(page_repos)
-        page += 1
-    return repos
+    p_mag(f"🎉 Index generated → {index_path}")
 
-def generate(data):
-    print(f"Fetching repos for org: {LBLU}{ORG_NAME}{RES}...")
-    repos = []
-    for repo in data:
-        if repo['name'].lower() in EXCLUDE_REPOS or 'practice' in repo['name'].lower():
-            print(f"Exclude Repo --> {BLRED}{repo['name']}{RES}")
-            continue
-        print(f"Processing {BLGRE}{repo['name']}{RES}...")
-        repo['languages'] = fetch_languages(repo['full_name'])
-        repo['languages'] += detect_extra_languages(repo)
-        repos.append(repo)
-    repos.sort(key=lambda r: r.get("stargazers_count", 0), reverse=True)
+# =================================================
+# MAIN ASYNC RUNNER
+# =================================================
+async def main_async():
+    p_mag(f"🚀 START: Building portfolio for {ORG_NAME}")
 
-    print(f"Found {YEL}{len(repos)}{RES} repos.")
-    generate_index(repos)
-    print(f"Generated {LMAG}index.html{RES} in {SITE_DIR}")
+    connector = TCPConnector(limit=CONCURRENT_CONNECTIONS, force_close=True)
+    timeout = aiohttp.ClientTimeout(sock_connect=REQUEST_TIMEOUT, sock_read=REQUEST_TIMEOUT)
 
+    async with aiohttp.ClientSession(connector=connector, timeout=timeout) as session:
+
+        repos = await fetch_repo_list(session)
+        if not repos:
+            p_err("❌ No repos fetched. Aborting.")
+            return
+
+        filtered = [
+            r for r in repos
+            if r["name"].lower() not in (name.lower() for name in EXCLUDE_REPOS)
+            and "practice" not in r["name"].lower()
+        ]
+
+        p_info(f"🧮 {len(filtered)} repos to process (parallel {CONCURRENT_CONNECTIONS})")
+
+        sem = asyncio.Semaphore(CONCURRENT_CONNECTIONS)
+
+        async def guarded(repo):
+            async with sem:
+                return await process_repo(session, repo)
+
+        tasks = [asyncio.create_task(guarded(r)) for r in filtered]
+
+        completed = []
+        for t in asyncio.as_completed(tasks):
+            try:
+                completed.append(await t)
+            except Exception as e:
+                p_err(f"❌ Error in repo task: {e}")
+                
+        completed.sort(key=lambda x: x["name"].lower())
+
+        generate_index(completed)
+
+    p_good("🎯 DONE")
+    
 # def main():
 #     print(f"Fetching repos for org: {LBLU}{ORG_NAME}{RES}...")
 #     url = f"https://api.github.com/orgs/{ORG_NAME}/repos?per_page=100"
@@ -216,6 +355,8 @@ def generate(data):
 #     print(f"Generated {LMAG}index.html{RES} in {SITE_DIR}")
 
 if __name__ == "__main__":
-    # main()
-    repos = get_all_repos(ORG_NAME)
-    generate(data=repos)
+    try:
+        asyncio.run(main_async())
+    except KeyboardInterrupt:
+        p_err("Interrupted by user.")
+        

@@ -16,14 +16,14 @@ BRED = '\033[1;91m'; BMAG = '\033[1;35m'; BYEL = '\033[1;33m'
 BBLU = '\033[1;34m'; BGRE ='\033[1;32m'; BCYN = '\033[1;36m' 
 BWHTE = '\033[1;97m'; BDGRY = '\033[1;90m'; BLGRY = '\033[1;37m'; 
 BLMAG = '\033[1;95m'; BLBLU = '\033[1;94m'; BLCYN = '\033[1;96m'
-CLEAR = '\033[H\033[J'
+CLEAR = '\033[H\033[J'; ORA = '\033[38;5;208m'
 
 # GITHUB
 ORG_NAME = "MarkM-Portfolio"
 REMOTE_PREFIX = f"git@github.com:{ORG_NAME}"
 USERNAME = [ "markmonmonteros", "markmon1919" ]
 NAME = "Mark Monteros"
-EMAIL = "monteros.markmon@gmail.com"
+EMAIL = "markmon.monteros@proton.me"
 BRANCH = "master"
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 TOKEN_FILE = os.path.join(SCRIPT_DIR, ".portfolio_gh_token")

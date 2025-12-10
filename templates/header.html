@@ -1,15 +1,41 @@
 <header>
-<h1>{ORG_NAME} Repositories</h1>
-<a href="{CV_FILE}" download class="cv-button">📄 Download CV</a>
-<button id="toggle-btn" onclick="toggleTheme()">🌙/☀️</button>
-{SEARCH_COMPONENT}
+  <h1>{ORG_NAME} Repositories</h1>
+
+  <div class="btn-group">
+    <a href="{CV_FILE}" download class="download-button btn-col">
+      <span class="col icon-col">⬇</span>
+      <span class="col text-col">Download CV</span>
+    </a>
+
+    <a href="{CV_FILE}" target="_blank" class="view-button btn-col">
+      <span class="col icon-col">◉</span>
+      <span class="col text-col">View CV</span>
+    </a>
+  </div>
+  
+  <button id="toggle-btn" class="toggle-btn" onclick="toggleTheme()">
+    <span class="toggle-icon">🌙</span>
+  </button>
+
+  {SEARCH_COMPONENT}
 </header>
+
 <script>
 function toggleTheme() {
-  document.body.classList.toggle('light');
-  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  const nowLight = document.body.classList.toggle('light');
+  localStorage.setItem('theme', nowLight ? 'light' : 'dark');
+
+  document.querySelector('.toggle-icon').textContent =
+      nowLight ? '☀️' : '🌙';
 }
+
 window.onload = function() {
   if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
 };
+
+window.addEventListener("scroll", () => {
+  const header = document.querySelector("header");
+  if (window.scrollY > 10) header.classList.add("scrolled");
+  else header.classList.remove("scrolled");
+});
 </script>

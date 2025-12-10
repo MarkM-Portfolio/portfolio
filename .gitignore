@@ -3,7 +3,6 @@
 .DS_Store
 __pycache__
 
-
-sites*
-*old
+.venv
 .portfolio_gh_token
+cover_letter/*.pdf

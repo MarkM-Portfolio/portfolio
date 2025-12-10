@@ -4,1932 +4,2810 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MarkM-Portfolio Portfolio</title>
-<style>
-:root { --bg:#0d1117; --header-bg:#161b22; --text:#c9d1d9; --card-bg:#161b22; --border:#30363d; --link:#58a6ff; --desc:#8b949e; --stars:#a1a1aa; --topic-bg:#21262d; --lang-bg:#30363d; }
-body.light { --bg:#f9fafb; --header-bg:#24292f; --text:#333; --card-bg:#fff; --border:#e5e7eb; --link:#0366d6; --desc:#555; --stars:#777; --topic-bg:#eaf5ff; --lang-bg:#f3f4f6; }
-body { font-family:Arial,sans-serif; background:var(--bg); color:var(--text); margin:0; padding:0; transition:0.3s; }
-header { background:var(--header-bg); color:var(--text); padding:1.5rem; text-align:center; border-bottom:1px solid var(--border); position:relative; }
-header h1 { margin:0; font-size:2rem; }
-.cv-button { display:block; margin:0.8rem auto 0 auto; background:gold; color:white; padding:0.4rem 0.8rem; border-radius:6px; border:1px solid white; text-decoration:none; font-size:0.9rem; width:max-content; }
-#toggle-btn { position:absolute; top:1.2rem; right:1rem; background:none; border:1px solid var(--border); color:var(--text); padding:0.4rem 0.8rem; border-radius:6px; cursor:pointer; font-size:0.9rem; }
-main { max-width:1100px; margin:2rem auto; padding:0 1rem; }
-.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1.5rem; }
-.card { background:var(--card-bg); padding:1.2rem; border-radius:10px; border:1px solid var(--border); box-shadow:0 2px 6px rgba(0,0,0,0.2); transition:0.2s; }
-.card:hover { transform:translateY(-4px); box-shadow:0 6px 14px rgba(0,0,0,0.25); }
-.card a { text-decoration:none; font-weight:bold; color:var(--link); font-size:1.2rem; }
-.desc { margin:0.5rem 0 0.8rem; font-size:0.95rem; color:var(--desc); }
-.stars { font-size:0.85rem; color:var(--stars); margin-bottom:0.5rem; }
-.topics,.languages { margin-top:0.5rem; }
-.topic,.lang { display:inline-block; padding:0.2rem 0.6rem; margin:0 0.3rem 0.3rem 0; font-size:0.8rem; border-radius:20px; border:1px solid var(--border); }
-.lang { background:var(--lang-bg); }
-#search-box { margin-top:1rem; padding:0.5rem 0.8rem; width:250px; border-radius:8px; border:1px solid var(--border); background:var(--card-bg); color:var(--text); }
-#search-box:focus { outline:none; border-color:var(--link); }
-</style>
+<style>:root {
+  --bg: #0d1117;
+  --header-bg: #161b22;
+  --text: #c9d1d9;
+  --card-bg: rgba(22, 27, 34, 1);
+  --card-title: #58a6ff;
+  --border: #30363d;
+  --link: #0366d6;
+  --desc: #8b949e;
+  --stars: #a1a1aa;
+  --topic-bg: #21262d;
+  --lang-bg: #30363d;
+  --accent: #58a6ff;
+  --card-hover: #12161b;
+  --border-hover: #2f7ddf;
+}
+
+body.light {
+  --bg: #f4f4f6;
+  --header-bg: #ffffff;
+  --text: #222;
+  --card-bg: #ffffff;
+  --card-title: #0366d6;
+  --border: #d0d0d0;
+  --link: #58a6ff;
+  --desc: #444;
+  --stars: #777;
+  --topic-bg: #eaf5ff;
+  --lang-bg: #f3f4f6;
+  --card-hover: #fdfdfd;
+  --border-hover: #5aa0ff;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  transition: 0.25s;
+}
+
+header{
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--header-bg);
+  padding: 1.5rem 1rem 1.2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+}
+
+header h1 { 
+  margin: 0 0 0.8rem;
+  font-size: 2rem;
+}
+
+.btn-group {
+  margin-top: 0.85rem; 
+  display: flex; 
+  justify-content: center; 
+  gap: 1.5rem;
+}
+
+.download-button,
+.view-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 0.35rem;
+  padding :0.45rem 0.9rem;
+  min-width: 130px; 
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color: white;
+  transition: 0.2s ease;
+}
+
+.download-button {
+  background: #1e78ff;
+  border: 1px solid #1e83ffff;
+  box-shadow: 0 6px 18px rgba(18,120,255,0.09);
+}
+
+.download-button:hover {
+  background: #12161b;
+  border-color:var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(18,120,255,0.14);
+}
+
+.view-button {
+  background: #238636;
+  border: 1px solid #2ea043;
+  box-shadow: 0 6px 18px rgba(18,120,255,0.09);
+}
+
+.view-button:hover { 
+  background: #12161b;
+  border-color:var(--border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 26px rgba(18,120,255,0.14);
+}
+
+/* Turn the button into a flex row with two columns */
+.btn-col {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  text-decoration: none;
+  gap: 0; /* no gap, true columns */
+}
+
+/* Column wrapper */
+.col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Column 1: Icon column (fixed width) */
+.icon-col {
+  width: 24px;       /* 👈 column size */
+  font-size: 1rem;
+}
+
+/* Column 2: Text column (auto grows) */
+.text-col {
+  flex: 1;
+  text-align: center;  /* or center if you want */
+}
+
+.toggle-btn {
+  position: absolute;
+  top: 1.2rem;
+  right: 1rem;
+  width: 46px;
+  height: 24px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.3s, border 0.3s;
+}
+
+/* The moving thumb */
+.toggle-btn .toggle-icon {
+  width: 20px;
+  height: 20px;
+  background: var(--card-bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: transform 0.3s, background 0.3s;
+  margin-left: 2px;
+}
+
+body.light .toggle-btn {
+  background: var(--bg);
+  border-color: var(--border);
+}
+
+body.light .toggle-btn .toggle-icon {
+  transform: translateX(22px);
+}
+
+main {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(300px,1fr)); 
+  gap: 1.5rem; 
+}
+
+.card {
+  position: relative;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.2rem;
+  transition: 0.2s ease;
+  box-shadow :0 2px 6px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.card:hover {
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+  transform: translateY(-4px);
+  background: var(--card-hover);
+  border-color: var(--border-hover);
+}
+
+.card * { user-select: text; }
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--card-title);
+}
+
+.card:hover .card-title {
+  color: var(--link);
+}
+
+.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+.card-link .card {
+  cursor: pointer;
+}
+
+.card-link:hover .card {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
+.desc {
+  margin: 0.5rem 0 0.8rem;
+  font-size: 0.95rem;
+  color: var(--desc);
+}
+
+.stars {
+  font-size: 0.85rem;
+  color: var(--stars);
+  margin-bottom: 0.5rem;
+}
+
+.topic, .lang {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  margin: 0 0.3rem 0.3rem 0;
+  font-size: 0.8rem;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+
+.lang {
+  background: var(--lang-bg);
+}
+
+#search-box {
+  margin-top: 1rem;
+  padding: 0.5rem 0.8rem;
+  width: 250px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+}
+
+#search-box:focus { border-color:var(--link); }
+
+/* Footer container */
+.site-footer {
+  margin-top: 3rem;
+  padding: 2rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+}
+
+/* 2 Columns layout */
+.footer-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Column settings */
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.footer-title {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.footer-sub {
+  font-size: 0.9rem;
+  color: var(--desc);
+}
+
+.footer-sub.small {
+  font-size: 0.8rem;
+}
+
+/* --- RIGHT COLUMN LINK LIST --- */
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+/* Each item (Email, GitHub, LinkedIn) */
+.footer-link-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.footer-link-item:hover .footer-text {
+  color: var(--link);
+}
+
+/* Icon + SVG */
+.footer-icon {
+  font-size: 1.2rem;
+}
+
+.svg-icon {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* Text after the icon */
+.footer-text {
+  color: var(--text);
+  transition: 0.2s;
+}
+
+/* --- MOBILE FIXES --- */
+@media (max-width: 700px) {
+
+  /* Only 1 column on mobile */
+  .footer-inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  /* Right side items centered */
+  .footer-col.right,
+  .footer-links {
+    align-items: center;
+  }
+}</style>
 </head>
 <body>
 <header>
-<h1>MarkM-Portfolio Repositories</h1>
-<a href="Mark Mon Monteros - CV.pdf" download class="cv-button">📄 Download CV</a>
-<button id="toggle-btn" onclick="toggleTheme()">🌙/☀️</button>
-<input type="text" id="search-box" placeholder="Search repositories, topics, or languages...">
+  <h1>MarkM-Portfolio Repositories</h1>
+
+  <div class="btn-group">
+    <a href="Mark Mon Monteros - CV.pdf" download class="download-button btn-col">
+      <span class="col icon-col">⬇</span>
+      <span class="col text-col">Download CV</span>
+    </a>
+
+    <a href="Mark Mon Monteros - CV.pdf" target="_blank" class="view-button btn-col">
+      <span class="col icon-col">◉</span>
+      <span class="col text-col">View CV</span>
+    </a>
+  </div>
+  
+  <button id="toggle-btn" class="toggle-btn" onclick="toggleTheme()">
+    <span class="toggle-icon">🌙</span>
+  </button>
+
+  <input type="text" id="search-box" placeholder="Search repositories, topics, or languages...">
 <script>
 document.addEventListener("DOMContentLoaded", () => {
   const searchBox = document.getElementById("search-box");
   if (!searchBox) return;
-  searchBox.addEventListener("input", function() {
+
+  searchBox.addEventListener("input", function () {
     const query = this.value.toLowerCase();
-    document.querySelectorAll(".card").forEach(card => {
-      card.style.display = card.innerText.toLowerCase().includes(query) ? "block" : "none";
+
+    document.querySelectorAll(".card-link").forEach(link => {
+      const text = link.innerText.toLowerCase();
+      link.style.display = text.includes(query) ? "" : "none";
     });
   });
 });
 </script>
 </header>
+
 <script>
 function toggleTheme() {
-  document.body.classList.toggle('light');
-  localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+  const nowLight = document.body.classList.toggle('light');
+  localStorage.setItem('theme', nowLight ? 'light' : 'dark');
+
+  document.querySelector('.toggle-icon').textContent =
+      nowLight ? '☀️' : '🌙';
 }
+
 window.onload = function() {
   if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
 };
+
+window.addEventListener("scroll", () => {
+  const header = document.querySelector("header");
+  if (window.scrollY > 10) header.classList.add("scrolled");
+  else header.classList.remove("scrolled");
+});
 </script>
+
 <main>
-<div class="grid"><div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ansible-citrix' target='_blank'>ansible-citrix</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws-sapphire-payer-customization' target='_blank'>aws-sapphire-payer-customization</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#844FBA'>Terraform</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/self-hosted-runner' target='_blank'>self-hosted-runner</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#844FBA'>Terraform</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ansible-primary-domain-controller' target='_blank'>ansible-primary-domain-controller</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws-lambda-ecr_self-hosted-runner' target='_blank'>aws-lambda-ecr_self-hosted-runner</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/terraform-aws-ec2-instance' target='_blank'>terraform-aws-ec2-instance</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#844FBA'>Terraform</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ansible-b1-windows-os-prep' target='_blank'>ansible-b1-windows-os-prep</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aft-account-requests' target='_blank'>aft-account-requests</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ansible-secondary-domain-controller' target='_blank'>ansible-secondary-domain-controller</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/paloalto-firewalls' target='_blank'>paloalto-firewalls</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#00ADD8'>Go</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws-control-tower-aft' target='_blank'>aws-control-tower-aft</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#844FBA'>Terraform</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/mgn-landingzone-stack' target='_blank'>mgn-landingzone-stack</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/customer-onboarding' target='_blank'>customer-onboarding</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/customer-onboarding-terraform' target='_blank'>customer-onboarding-terraform</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#844FBA'>Terraform</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aft-global-customizations' target='_blank'>aft-global-customizations</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/utilities' target='_blank'>utilities</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>HCL</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws_launch_wizards_script' target='_blank'>aws_launch_wizards_script</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aft-account-provisioning-customizations' target='_blank'>aft-account-provisioning-customizations</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ami-factory' target='_blank'>ami-factory</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/customer-workloads' target='_blank'>customer-workloads</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ansible-sap-b1-hana' target='_blank'>ansible-sap-b1-hana</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws-tag-scheduler' target='_blank'>aws-tag-scheduler</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws-lambda-self-hosted-runner' target='_blank'>aws-lambda-self-hosted-runner</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#6e7681'>PowerShell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aft-account-customizations' target='_blank'>aft-account-customizations</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws-profile-creator' target='_blank'>aws-profile-creator</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>sapphiresystems</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/msgco-chargebee-data-sync' target='_blank'>msgco-chargebee-data-sync</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/build-service-ami' target='_blank'>build-service-ami</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/shared-infra' target='_blank'>shared-infra</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/abee' target='_blank'>abee</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#00ADD8'>Go</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/atmail-webhooks' target='_blank'>atmail-webhooks</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/zendesk-new' target='_blank'>zendesk-new</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#00ADD8'>Go</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/elk-utils' target='_blank'>elk-utils</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/chargebee-mailserver-tool' target='_blank'>chargebee-mailserver-tool</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/mailbox-mgmt' target='_blank'>mailbox-mgmt</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws-cfn' target='_blank'>aws-cfn</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/cloud-infra' target='_blank'>cloud-infra</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/authapi' target='_blank'>authapi</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#00ADD8'>Go</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/aws-sso-switcher' target='_blank'>aws-sso-switcher</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ops-api' target='_blank'>ops-api</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/platform-ansible' target='_blank'>platform-ansible</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-<span class='lang' style='background:#844FBA'>Terraform</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/msgco-chargebee-webhooks' target='_blank'>msgco-chargebee-webhooks</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>atmail</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/agencySignUpFormJS' target='_blank'>agencySignUpFormJS</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/python' target='_blank'>python</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/text-processing-python' target='_blank'>text-processing-python</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/GatewayHotel' target='_blank'>GatewayHotel</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/mishyjazzapp' target='_blank'>mishyjazzapp</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/salesforceAPI' target='_blank'>salesforceAPI</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/demand_ui' target='_blank'>demand_ui</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#6e7681'>TeX</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/scatter-slots' target='_blank'>scatter-slots</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>casino</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/robinhoodai' target='_blank'>robinhoodai</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>casino</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/bash-scripts' target='_blank'>bash-scripts</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>cnx</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/surneco-warehouse' target='_blank'>surneco-warehouse</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/com.concentrix.wah.chatbot' target='_blank'>com.concentrix.wah.chatbot</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>cnx</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#178600'>C#</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/text-processing-bash' target='_blank'>text-processing-bash</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>acn</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/epa-app-android' target='_blank'>epa-app-android</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>epa</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/epa-app-ios_current' target='_blank'>epa-app-ios_current</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>epa</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#F05138'>Swift</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/MetaTrader5-Docker-Image' target='_blank'>MetaTrader5-Docker-Image</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>forextrading</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/metatrader4' target='_blank'>metatrader4</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>forextrading</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/epa2' target='_blank'>epa2</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>epa</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/AutoTrading-Scheduler' target='_blank'>AutoTrading-Scheduler</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>forextrading</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/metatrader5' target='_blank'>metatrader5</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>forextrading</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/epa-dashboard' target='_blank'>epa-dashboard</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>epa</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/epa-business' target='_blank'>epa-business</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>epa</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/epa-app-ios' target='_blank'>epa-app-ios</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>epa</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#F05138'>Swift</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/connections-mongo5' target='_blank'>connections-mongo5</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/epa' target='_blank'>epa</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>epa</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/conn-automation' target='_blank'>conn-automation</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/metrics' target='_blank'>metrics</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>FreeMarker</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/docker-go1.16.backend' target='_blank'>docker-go1.16.backend</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/terraform' target='_blank'>terraform</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#844FBA'>Terraform</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/lc-installer' target='_blank'>lc-installer</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#555555'>C</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kdp-yamashita-api' target='_blank'>kdp-yamashita-api</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/sonarslack' target='_blank'>sonarslack</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>Procfile</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/blogs' target='_blank'>blogs</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>J</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kdp-taho-api' target='_blank'>kdp-taho-api</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/elasticsearch7' target='_blank'>elasticsearch7</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-devops-vpn-account-automation' target='_blank'>kumu-devops-vpn-account-automation</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/sn.auto' target='_blank'>sn.auto</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>Less</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#701516'>Ruby</span>
-<span class='lang' style='background:#6e7681'>SCSS</span>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#6e7681'>CoffeeScript</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#6e7681'>PowerShell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/generated_charts' target='_blank'>generated_charts</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/bootstrap' target='_blank'>bootstrap</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/homepage' target='_blank'>homepage</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/dev_pool_servers' target='_blank'>dev_pool_servers</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/detect-secrets' target='_blank'>detect-secrets</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/redis' target='_blank'>redis</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/awsauto' target='_blank'>awsauto</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>Pug</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/itm-services' target='_blank'>itm-services</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/environments' target='_blank'>environments</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/deployment-ansible' target='_blank'>deployment-ansible</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/install-im' target='_blank'>install-im</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#6e7681'>Assembly</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ansible-scripts' target='_blank'>ansible-scripts</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ds-jenkins-google-chat' target='_blank'>ds-jenkins-google-chat</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>Groovy</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/widgetscal' target='_blank'>widgetscal</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#6e7681'>FreeMarker</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/pipelines' target='_blank'>pipelines</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/docs' target='_blank'>docs</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#6e7681'>Tcl</span>
-<span class='lang' style='background:#6e7681'>Less</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#6e7681'>PowerShell</span>
-<span class='lang' style='background:#f34b7d'>C++</span>
-<span class='lang' style='background:#178600'>C#</span>
-<span class='lang' style='background:#6e7681'>sed</span>
-<span class='lang' style='background:#555555'>C</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#701516'>Ruby</span>
-<span class='lang' style='background:#6e7681'>Mask</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kdp-k8s-helmchart' target='_blank'>kdp-k8s-helmchart</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#326CE5'>Kubernetes</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/terraform_test' target='_blank'>terraform_test</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#844FBA'>Terraform</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/docker-go1.17' target='_blank'>docker-go1.17</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/Datadog-Agent' target='_blank'>Datadog-Agent</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-agorachat-profile-service' target='_blank'>kumu-agorachat-profile-service</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/Others' target='_blank'>Others</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kdp-data-science' target='_blank'>kdp-data-science</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-template-laravel' target='_blank'>kumu-template-laravel</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-k8s-backend-helmchart' target='_blank'>kumu-k8s-backend-helmchart</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#326CE5'>Kubernetes</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-devops-cli-tools' target='_blank'>kumu-devops-cli-tools</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/admin-portal' target='_blank'>admin-portal</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#6e7681'>SCSS</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/search' target='_blank'>search</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-api' target='_blank'>kumu-api</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#6e7681'>Less</span>
-<span class='lang' style='background:#6e7681'>SCSS</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#701516'>Ruby</span>
-<span class='lang' style='background:#6e7681'>CoffeeScript</span>
-<span class='lang' style='background:#6e7681'>PowerShell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/sanity' target='_blank'>sanity</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#6e7681'>Pug</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/icautomation_db' target='_blank'>icautomation_db</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/Kubernetes_APM' target='_blank'>Kubernetes_APM</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#326CE5'>Kubernetes</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/bookmarks' target='_blank'>bookmarks</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#f34b7d'>C++</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kdp-halohalo-api' target='_blank'>kdp-halohalo-api</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/infra-ui' target='_blank'>infra-ui</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#6e7681'>Less</span>
-<span class='lang' style='background:#6e7681'>SCSS</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/docker-web80' target='_blank'>docker-web80</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#555555'>C</span>
-<span class='lang' style='background:#6e7681'>Assembly</span>
-<span class='lang' style='background:#6e7681'>Perl</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>M4</span>
-<span class='lang' style='background:#6e7681'>eC</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#701516'>Ruby</span>
-<span class='lang' style='background:#6e7681'>sed</span>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#6e7681'>Tree-sitter Query</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/deploy-services' target='_blank'>deploy-services</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#326CE5'>Kubernetes</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/docker-web72' target='_blank'>docker-web72</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/nginx' target='_blank'>nginx</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/sample_py_app' target='_blank'>sample_py_app</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/template-npm' target='_blank'>template-npm</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-devops-datadog-automation-deployment' target='_blank'>kumu-devops-datadog-automation-deployment</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/eks-config-files' target='_blank'>eks-config-files</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/datadog_helm' target='_blank'>datadog_helm</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/teams' target='_blank'>teams</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#326CE5'>Kubernetes</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kdp-malacanang-api' target='_blank'>kdp-malacanang-api</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ansible-eks-automation' target='_blank'>ansible-eks-automation</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#EE0000'>Ansible</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/Portal-Test-Automation' target='_blank'>Portal-Test-Automation</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#6e7681'>Groovy</span>
-<span class='lang' style='background:#6e7681'>HCL</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kdp-bantay-api' target='_blank'>kdp-bantay-api</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/Github_Repo' target='_blank'>Github_Repo</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#6e7681'>HCL</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/backup_py3' target='_blank'>backup_py3</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-api-games-v2' target='_blank'>kumu-api-games-v2</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/argocd-apps' target='_blank'>argocd-apps</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/kumu-k8s-helmchart' target='_blank'>kumu-k8s-helmchart</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#326CE5'>Kubernetes</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/dd-trace-php' target='_blank'>dd-trace-php</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>kumu</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#4F5D95'>PHP</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#555555'>C</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#dea584'>Rust</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-<span class='lang' style='background:#6e7681'>Twig</span>
-<span class='lang' style='background:#6e7681'>Makefile</span>
-<span class='lang' style='background:#6e7681'>SCSS</span>
-<span class='lang' style='background:#6e7681'>M4</span>
-<span class='lang' style='background:#6e7681'>Vue</span>
-<span class='lang' style='background:#6e7681'>CMake</span>
-<span class='lang' style='background:#6e7681'>Latte</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/was9_installer' target='_blank'>was9_installer</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/mongo5-sidecar' target='_blank'>mongo5-sidecar</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/middleware-graphql' target='_blank'>middleware-graphql</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#3178c6'>TypeScript</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ibm-semeru-8' target='_blank'>ibm-semeru-8</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/profiles' target='_blank'>profiles</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#6e7681'>FreeMarker</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/ci-common' target='_blank'>ci-common</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#701516'>Ruby</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/conf' target='_blank'>conf</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/placescatalog' target='_blank'>placescatalog</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/haproxy' target='_blank'>haproxy</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#0db7ed'>Dockerfile</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/share' target='_blank'>share</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#b07219'>Java</span>
-<span class='lang' style='background:#6e7681'>FreeMarker</span>
-<span class='lang' style='background:#f1e05a'>JavaScript</span>
-<span class='lang' style='background:#e34c26'>HTML</span>
-<span class='lang' style='background:#563d7c'>CSS</span>
-<span class='lang' style='background:#555555'>C</span>
-<span class='lang' style='background:#6e7681'>XSLT</span>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#3572A5'>Python</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/lc-installer-py3' target='_blank'>lc-installer-py3</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>hcl</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
-<div class='card'>
-<a href='https://github.com/MarkM-Portfolio/picto-infra' target='_blank'>picto-infra</a>
-<p class='desc'>No description provided.</p>
-<p class='stars'>⭐ 0 stars</p>
-<div class='topics'>
-<span class='topic'>picto</span>
-</div>
-<div class='languages'>
-<span class='lang' style='background:#89e051'>Shell</span>
-<span class='lang' style='background:#cb171e'>YAML</span>
-</div>
-</div>
+<div class="grid">
+<a class="card-link" href="https://github.com/MarkM-Portfolio/abee" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">abee</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#00ADD8'>Go</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/admin-portal" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">admin-portal</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#6e7681'>SCSS</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aft-account-customizations" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aft-account-customizations</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aft-account-provisioning-customizations" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aft-account-provisioning-customizations</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aft-account-requests" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aft-account-requests</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aft-global-customizations" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aft-global-customizations</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/agencySignUpFormJS" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">agencySignUpFormJS</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ami-factory" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ami-factory</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ansible-b1-windows-os-prep" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ansible-b1-windows-os-prep</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ansible-citrix" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ansible-citrix</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ansible-eks-automation" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ansible-eks-automation</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ansible-primary-domain-controller" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ansible-primary-domain-controller</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ansible-sap-b1-hana" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ansible-sap-b1-hana</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ansible-scripts" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ansible-scripts</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ansible-secondary-domain-controller" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ansible-secondary-domain-controller</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/argocd-apps" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">argocd-apps</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/atmail-webhooks" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">atmail-webhooks</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/authapi" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">authapi</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#00ADD8'>Go</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/AutoTrading-Scheduler" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">AutoTrading-Scheduler</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>forextrading</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws-cfn" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws-cfn</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws-control-tower-aft" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws-control-tower-aft</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#844FBA'>Terraform</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws-lambda-ecr_self-hosted-runner" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws-lambda-ecr_self-hosted-runner</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws-lambda-self-hosted-runner" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws-lambda-self-hosted-runner</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#6e7681'>PowerShell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws-profile-creator" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws-profile-creator</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws-sapphire-payer-customization" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws-sapphire-payer-customization</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+      <span class='lang' style='background:#844FBA'>Terraform</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws-sso-switcher" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws-sso-switcher</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws-tag-scheduler" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws-tag-scheduler</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/aws_launch_wizards_script" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">aws_launch_wizards_script</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/awsauto" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">awsauto</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>Pug</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/backup_py3" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">backup_py3</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/bash-scripts" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">bash-scripts</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>cnx</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/blogs" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">blogs</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>J</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/bookmarks" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">bookmarks</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#f34b7d'>C++</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/bootstrap" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">bootstrap</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/build-service-ami" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">build-service-ami</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/chargebee-mailserver-tool" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">chargebee-mailserver-tool</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ci-common" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ci-common</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#701516'>Ruby</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/cloud-infra" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">cloud-infra</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/com.concentrix.wah.chatbot" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">com.concentrix.wah.chatbot</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>cnx</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#178600'>C#</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/conf" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">conf</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/conn-automation" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">conn-automation</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/connections-mongo5" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">connections-mongo5</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/customer-onboarding" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">customer-onboarding</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/customer-onboarding-terraform" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">customer-onboarding-terraform</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#844FBA'>Terraform</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/customer-workloads" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">customer-workloads</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/Datadog-Agent" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">Datadog-Agent</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/datadog_helm" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">datadog_helm</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/dd-trace-php" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">dd-trace-php</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#555555'>C</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#dea584'>Rust</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#6e7681'>Twig</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#6e7681'>SCSS</span>
+      <span class='lang' style='background:#6e7681'>M4</span>
+      <span class='lang' style='background:#6e7681'>Vue</span>
+      <span class='lang' style='background:#6e7681'>CMake</span>
+      <span class='lang' style='background:#6e7681'>Latte</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/demand_ui" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">demand_ui</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#6e7681'>TeX</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/deploy-services" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">deploy-services</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/deployment-ansible" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">deployment-ansible</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/detect-secrets" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">detect-secrets</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/dev_pool_servers" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">dev_pool_servers</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/docker-go1.16.backend" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">docker-go1.16.backend</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/docker-go1.17" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">docker-go1.17</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/docker-web72" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">docker-web72</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/docker-web80" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">docker-web80</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#555555'>C</span>
+      <span class='lang' style='background:#6e7681'>Assembly</span>
+      <span class='lang' style='background:#6e7681'>Perl</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>M4</span>
+      <span class='lang' style='background:#6e7681'>eC</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#701516'>Ruby</span>
+      <span class='lang' style='background:#6e7681'>sed</span>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#6e7681'>Tree-sitter Query</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/docs" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">docs</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#6e7681'>Tcl</span>
+      <span class='lang' style='background:#6e7681'>Less</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#6e7681'>PowerShell</span>
+      <span class='lang' style='background:#f34b7d'>C++</span>
+      <span class='lang' style='background:#178600'>C#</span>
+      <span class='lang' style='background:#6e7681'>sed</span>
+      <span class='lang' style='background:#555555'>C</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#701516'>Ruby</span>
+      <span class='lang' style='background:#6e7681'>Mask</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ds-jenkins-google-chat" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ds-jenkins-google-chat</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>Groovy</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/eks-config-files" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">eks-config-files</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/elasticsearch7" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">elasticsearch7</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/elk-utils" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">elk-utils</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/environments" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">environments</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/epa" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">epa</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>epa</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/epa-app-android" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">epa-app-android</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>epa</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/epa-app-ios" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">epa-app-ios</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>epa</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#F05138'>Swift</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/epa-app-ios_current" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">epa-app-ios_current</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>epa</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#F05138'>Swift</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/epa-business" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">epa-business</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>epa</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/epa-dashboard" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">epa-dashboard</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>epa</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/epa2" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">epa2</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>epa</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/GatewayHotel" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">GatewayHotel</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/generated_charts" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">generated_charts</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/Github_Repo" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">Github_Repo</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/haproxy" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">haproxy</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/homepage" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">homepage</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ibm-semeru-8" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ibm-semeru-8</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/icautomation_db" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">icautomation_db</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/infra-ui" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">infra-ui</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#6e7681'>Less</span>
+      <span class='lang' style='background:#6e7681'>SCSS</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/install-im" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">install-im</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#6e7681'>Assembly</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/itm-services" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">itm-services</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kdp-bantay-api" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kdp-bantay-api</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kdp-data-science" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kdp-data-science</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kdp-halohalo-api" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kdp-halohalo-api</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kdp-k8s-helmchart" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kdp-k8s-helmchart</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#326CE5'>Kubernetes</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kdp-malacanang-api" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kdp-malacanang-api</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kdp-taho-api" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kdp-taho-api</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kdp-yamashita-api" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kdp-yamashita-api</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/Kubernetes_APM" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">Kubernetes_APM</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-agorachat-profile-service" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-agorachat-profile-service</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-api" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-api</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#6e7681'>Less</span>
+      <span class='lang' style='background:#6e7681'>SCSS</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#701516'>Ruby</span>
+      <span class='lang' style='background:#6e7681'>CoffeeScript</span>
+      <span class='lang' style='background:#6e7681'>PowerShell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-api-games-v2" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-api-games-v2</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-devops-cli-tools" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-devops-cli-tools</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-devops-datadog-automation-deployment" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-devops-datadog-automation-deployment</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-devops-vpn-account-automation" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-devops-vpn-account-automation</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-k8s-backend-helmchart" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-k8s-backend-helmchart</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#326CE5'>Kubernetes</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-k8s-helmchart" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-k8s-helmchart</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#326CE5'>Kubernetes</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/kumu-template-laravel" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">kumu-template-laravel</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/lc-installer" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">lc-installer</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#555555'>C</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/lc-installer-py3" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">lc-installer-py3</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/mailbox-mgmt" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">mailbox-mgmt</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/metatrader4" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">metatrader4</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>forextrading</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/metatrader5" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">metatrader5</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>forextrading</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/MetaTrader5-Docker-Image" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">MetaTrader5-Docker-Image</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>forextrading</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/metrics" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">metrics</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>FreeMarker</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/mgn-landingzone-stack" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">mgn-landingzone-stack</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/middleware-graphql" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">middleware-graphql</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3178c6'>TypeScript</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/mishyjazzapp" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">mishyjazzapp</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/mongo5-sidecar" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">mongo5-sidecar</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/msgco-chargebee-data-sync" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">msgco-chargebee-data-sync</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/msgco-chargebee-webhooks" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">msgco-chargebee-webhooks</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/nginx" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">nginx</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/ops-api" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">ops-api</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/Others" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">Others</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/paloalto-firewalls" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">paloalto-firewalls</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#00ADD8'>Go</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/picto-infra" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">picto-infra</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>picto</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/pipelines" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">pipelines</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/placescatalog" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">placescatalog</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/platform-ansible" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">platform-ansible</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#EE0000'>Ansible</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/Portal-Test-Automation" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">Portal-Test-Automation</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>Groovy</span>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/profiles" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">profiles</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#6e7681'>FreeMarker</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/python" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">python</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/redis" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">redis</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/robinhoodai" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">robinhoodai</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>casino</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/salesforceAPI" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">salesforceAPI</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/sample_py_app" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">sample_py_app</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/sanity" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">sanity</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#6e7681'>Pug</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/scatter-slots" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">scatter-slots</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>casino</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/search" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">search</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/self-hosted-runner" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">self-hosted-runner</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#844FBA'>Terraform</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/share" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">share</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#6e7681'>FreeMarker</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#555555'>C</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/shared-infra" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">shared-infra</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/sn.auto" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">sn.auto</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>Less</span>
+      <span class='lang' style='background:#6e7681'>XSLT</span>
+      <span class='lang' style='background:#701516'>Ruby</span>
+      <span class='lang' style='background:#6e7681'>SCSS</span>
+      <span class='lang' style='background:#4F5D95'>PHP</span>
+      <span class='lang' style='background:#6e7681'>CoffeeScript</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#6e7681'>PowerShell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/sonarslack" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">sonarslack</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>Procfile</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/surneco-warehouse" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">surneco-warehouse</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#0db7ed'>Dockerfile</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/teams" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">teams</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/template-npm" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">template-npm</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/terraform" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">terraform</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#844FBA'>Terraform</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/terraform-aws-ec2-instance" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">terraform-aws-ec2-instance</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#844FBA'>Terraform</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/terraform_test" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">terraform_test</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>kumu</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+      <span class='lang' style='background:#844FBA'>Terraform</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/text-processing-bash" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">text-processing-bash</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#89e051'>Shell</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/text-processing-python" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">text-processing-python</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>acn</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/utilities" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">utilities</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>sapphiresystems</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#3572A5'>Python</span>
+      <span class='lang' style='background:#6e7681'>HCL</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/was9_installer" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">was9_installer</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/widgetscal" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">widgetscal</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>hcl</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#f1e05a'>JavaScript</span>
+      <span class='lang' style='background:#b07219'>Java</span>
+      <span class='lang' style='background:#e34c26'>HTML</span>
+      <span class='lang' style='background:#563d7c'>CSS</span>
+      <span class='lang' style='background:#6e7681'>FreeMarker</span>
+    </div>
+  </div>
+</a>
+
+<a class="card-link" href="https://github.com/MarkM-Portfolio/zendesk-new" target="_blank" rel="noopener">
+  <div class="card">
+    <div class="card-title">zendesk-new</div>
+    <p class="desc">None</p>
+    <p class="stars">⭐ 0 stars</p>
+    <div class='topics'>
+      <span class='topic'>atmail</span>
+    </div>
+    <div class='languages'>
+      <span class='lang' style='background:#00ADD8'>Go</span>
+      <span class='lang' style='background:#89e051'>Shell</span>
+      <span class='lang' style='background:#6e7681'>Makefile</span>
+      <span class='lang' style='background:#cb171e'>YAML</span>
+    </div>
+  </div>
+</a>
 </div>
 </main>
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <!-- LEFT COLUMN -->
+    <div class="footer-col left">
+      <div class="footer-title">© MarkM-Portfolio</div>
+
+      <div class="footer-sub">
+        Maintained by <strong>Mark Mon Eleazar Monteros</strong>
+      </div>
+
+      <div class="footer-sub small">
+        Built automatically using a custom FastAPI + Python generator.
+      </div>
+
+      <div class="footer-sub small">
+        Deployed globally on Cloudflare Workers & Pages.
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="footer-col right">
+
+        <div class="footer-links">
+
+        <a href="mailto:markmon.monteros@proton.me" class="footer-link-item">
+            <span class="footer-icon">✉️</span>
+            <span class="footer-text">markmon.monteros@proton.me</span>
+        </a>
+
+        <a href="https://github.com/markmon1919" class="footer-link-item" target="_blank">
+            <svg viewBox="0 0 16 16" class="svg-icon">
+            <path fill="currentColor"
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 
+                5.47 7.59.4.07.55-.17.55-.38 
+                0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94
+                -.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
+                -.01-.53.63-.01 1.08.58 1.23.82.72 1.21 
+                1.87.87 2.33.66.07-.52.28-.87.51-1.07
+                -1.78-.2-3.64-.89-3.64-3.95 
+                0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 
+                0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 4 0c1.53-1.04 
+                2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 
+                0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 
+                0 1.07-.01 1.93-.01 2.2 0 .21.15.45.55.38A8.013 
+                8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z" />
+            </svg>
+            <span class="footer-text">https://github.com/markmonmonteros</span>
+        </a>
+
+        <a href="https://linkedin.com/in/markmonmonteros" class="footer-link-item" target="_blank">
+            <svg viewBox="0 0 24 24" class="svg-icon">
+            <path fill="currentColor"
+                d="M4.98 3.5C4.98 4.88 3.87 6 2.48 6S0 4.88 
+                0 3.5 1.11 1 2.49 1s2.49 1.12 2.49 2.5zM.5 8.5h4v15h-4v-15zm7 
+                0h3.8v2.2h.1c.5-.9 1.7-2.2 3.7-2.2 4 0 4.7 2.6 4.7 6v9h-4v-8.4 
+                c0-2-.1-4.6-2.8-4.6-2.8 0-3.2 2.2-3.2 4.4v8.6h-4v-15z" />
+            </svg>
+            <span class="footer-text">https://linkedin.com/in/markmonmonteros</span>
+        </a>
+
+        </div>
+
+    </div>
+
+  </div>
+</footer>
 </body>
 </html>

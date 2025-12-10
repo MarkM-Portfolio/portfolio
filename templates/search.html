@@ -3,10 +3,13 @@
 document.addEventListener("DOMContentLoaded", () => {
   const searchBox = document.getElementById("search-box");
   if (!searchBox) return;
-  searchBox.addEventListener("input", function() {
+
+  searchBox.addEventListener("input", function () {
     const query = this.value.toLowerCase();
-    document.querySelectorAll(".card").forEach(card => {
-      card.style.display = card.innerText.toLowerCase().includes(query) ? "block" : "none";
+
+    document.querySelectorAll(".card-link").forEach(link => {
+      const text = link.innerText.toLowerCase();
+      link.style.display = text.includes(query) ? "" : "none";
     });
   });
 });
