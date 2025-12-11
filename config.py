@@ -38,4 +38,4 @@ DEFAULT_LANG_MAP = { "py": "Python", "js": "JavaScript", "ts": "TypeScript", "ja
                     "css": "CSS", "cpp": "C++", "c": "C", "cs": "C#", "md": "Markdown", "inc": "AWS Infra",
                     "jinja": "Jinja", "tpl": "Template File", "txt": "Text File", "cfg": "Config File",
                     "Dockerfile": "Docker", "dockerignore": "Docker", "pem": "PEM Key"}
-CV_FILE = "Mark Mon Monteros - CV.pdf"
+CV_FILE = "Mark Mon Monteros - CV (DevOps).pdf"

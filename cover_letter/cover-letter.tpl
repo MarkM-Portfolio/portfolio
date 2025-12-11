@@ -1,29 +1,26 @@
+Mark Mon E. Monteros
+Quezon City, Philippines
+Mobile: ${MOBILE}
+Email: ${EMAIL}
+LinkedIn: linkedin.com/in/markmonmonteros
+GitHub: github.com/markmon1919
 
 ${DATE}
 
-Hiring/Recruitment Team
+Hiring Manager
 ${COMPANY}
 
+Dear Hiring Manager,
 
-Dear Hiring/Recruitment Team --
+I am writing to express my interest in the DevOps Engineer position at ${COMPANY}. With over 7 years of hands-on experience in DevOps, Cloud Infrastructure, Kubernetes, CI/CD automation, and Platform Engineering, I am confident in my ability to contribute immediate value to your engineering and operations organization.
 
-I am writing to express my interest in the ${ROLE} position at ${COMPANY}. With over 10 years of experience in IT and 7+ years specializing in cloud infrastructure, automation, DevOps and orchestration, I bring a combination of software engineering expertise, deep cloud knowledge and strong operational reliability practices that align well with your team’s needs.
+In my current role as an Automation/Platform Engineer at Emapta, I designed and implemented cloud-native architectures across AWS, automated release processes, and modernized deployment workflows that significantly improved engineering efficiency. I successfully reduced AWS operational costs by 20–30%, automated 80% of manual tasks, and shortened deployments from 2–3 days to 15–30 minutes through optimized CI/CD pipelines and container orchestration.
 
-Throughout my career, I’ve built and maintained scalable cloud platforms across AWS, GCP and Azure, automated CI/CD pipelines, designed Kubernetes-based architectures, implemented GitOps workflows and delivered internal tools that improved development efficiency and system reliability. My work includes end-to-end DevOps ownership: from infrastructure automation using Terraform/Ansible, to container orchestration with EKS/GKE/AKS to observability stacks.
+My experience includes managing multi-cluster Kubernetes environments, implementing GitOps workflows using ArgoCD, building 15+ CI/CD pipelines, and deploying containerized microservices across distributed systems. I am especially strong in troubleshooting production issues end-to-end—across AWS, Kubernetes, networking, and application layers—ensuring reliability, scalability, and security.
 
-In my recent role as an Automation & Platform Engineer at Emapta, I designed automated deployment pipelines, optimized Kubernetes workloads and improved platform scalability through IaC and GitOps. In previous roles, I led DevOps modernization initiatives, built automation frameworks from scratch, improved release processes and supported large-scale distributed systems with high uptime requirements. My background in network engineering (CCNA) also enables me to diagnose complex infrastructure and networking issues quickly.
+I am passionate about improving developer productivity, eliminating operational bottlenecks, and building infrastructure that scales reliably. What excites me most about ${COMPANY} is the opportunity to contribute to a high-impact engineering team where automation, cloud excellence, and continuous improvement are core values.
 
-I am passionate about building reliable systems, reducing manual effort through automation, improving developer experience and enabling engineering teams to deploy efficiently and safely. I take ownership of problems end-to-end, collaborate effectively across teams and bring a practical, solution-focused mindset to every challenge.
+I would welcome the opportunity to discuss how my background in DevOps, automation, Kubernetes, and cloud engineering aligns with the goals of your team. Thank you for your time and consideration. I look forward to the possibility of contributing to ${COMPANY}.
 
-I would welcome the opportunity to contribute my experience in cloud platforms, Kubernetes, automation and reliability engineering to ${COMPANY}. Thank you for considering my application. I look forward to the possibility of discussing how I can add value to your engineering team.
-
-
-All the best,
-<strong>Mark Mon E. Monteros</strong>
-DevOps/Platform Engineer
-
---------------------------------------------------
-📱 ${MOBILE}
-📧 ${EMAIL}
-🌐 ${WEBSITE}
---------------------------------------------------
+Sincerely,
+Mark Mon E. Monteros
